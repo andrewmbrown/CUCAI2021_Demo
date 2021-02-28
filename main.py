@@ -56,13 +56,23 @@ if navigation == 'Options Description':
         of the contract. As the underlying stock price moves favorably with respect to the contract terms, the premium of the
         contract increases. 
         ### Calls
-        When a trader 
+        When a trader enters into a call contract, they are agreeing to purchase 100 shares of the underlying
+        security at the chosen strike price. Again, the contract can be executed at any time before the expiry date
+        but the trader is not obligated to execute.
+
+        Call contracts can net profit when the underlying stock price goes above the purchased strike price; intuitively,
+        think of it as purchasing a stock at a discount, and then selling it at market value.
+        ### Puts
+        Alternatively, a put contract represents the agreement to sell 100 shares of the underlying security at the
+        chosen strike price. Thus, a profit can be made when the stock price goes below the strike, as it essentially
+        allows the contract holder to sell a stock for more than its worth.
         
+        ***
     
     """)
     
     st.write("""
-    #
+    ### Strategies
     """)
 
 
