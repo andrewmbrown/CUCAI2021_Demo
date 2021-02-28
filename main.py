@@ -21,8 +21,24 @@ if navigation == 'Options Description':
 
 if navigation == 'ARIMA Description':
     st.write("""
-    ## Arima Description
+    ## ARIMA Description
+    An ARIMA model stands for 'Auto Regressive Integrated Moving Average' it has 3 hyper-paramters:
     """)
+    st.markdown('- p: the order of the AR term')
+    st.markdown('- q: the order of the MA term')
+    st.markdown('- d: the number of differencing required for stationarity')
+    st.write("ARIMA model are used for time series forecasting, a class of models that explains a given time series based on its own passed values")
+    st.write("The team decided to apply ARIMA models to forecast the VIX, a popular known volatility index of the S&P 500")
+
+    tik = '^VIX'
+    vixData = yf.Ticker(tik)
+    vixDF = vixData.history(period='1d', start='2010-5-31', end='2020-2-26')
+
+    st.write("## VIX Price Since 2010")
+    st.line_chart(vixDF.Close)
+
+    st.write('')
+
 
 if navigation == 'Our Solution':
     st.write("""
