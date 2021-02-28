@@ -12,7 +12,9 @@ sideBarOptions = ['Introduction','Options Description', 'ARIMA Description', 'Ou
 navigation = st.sidebar.selectbox('Go To', sideBarOptions, index = 0)
 
 if navigation == 'Introduction':
-    st.write("")
+    st.write("""
+        ## Introduction
+    """)
 
 if navigation == 'Options Description':
     st.write("""
