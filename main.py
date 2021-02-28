@@ -3,10 +3,9 @@ import yfinance as yf
 import pandas as pd
 import numpy as np
 
-st.title("""
-    Options Volatility Analysis
-
-""")
+st.title("Stock Options' Volatility Prediction")
+st.header("QMIND - Group 21 - March 6th, 2021")
+st.subheader("Alex Le Blanc :coffee:, Smeet Schheda :100:, Andrew Brown :raised_hands:, Tanner Dunn :sunglasses:")
 
 st.sidebar.title("Navigation")
 sideBarOptions = ['Introduction','Options Description', 'ARIMA Description', 'Our Solution']
