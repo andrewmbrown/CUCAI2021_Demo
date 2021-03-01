@@ -8,7 +8,7 @@ st.header("QMIND - Group 21 - March 6th, 2021")
 st.subheader("Alex Le Blanc :coffee:, Smeet Schheda :100:, Andrew Brown :raised_hands:, Tanner Dunn :sunglasses:")
 
 st.sidebar.title("Navigation")
-sideBarOptions = ['Introduction','Options Description', 'ARIMA Description', 'Our Solution']
+sideBarOptions = ['Introduction','Options Description', 'Strategies', 'ARIMA Description', 'Our Solution']
 navigation = st.sidebar.selectbox('Go To', sideBarOptions, index = 0)
 
 if navigation == 'Introduction':
@@ -50,6 +50,7 @@ if navigation == 'Options Description':
         - Strike Price
         - Expiry Date
         - Premium
+        
         The strike price is the price at which the contract agreement is executed, whereas the expiry date
         acts the same way it does on a coupon. A buyer can, but is not obligated to, execute the contract at any point
         prior to expiry; however, once the contract has reached expiry, it is worthless. The premium can be thought of as the price
@@ -71,10 +72,9 @@ if navigation == 'Options Description':
     
     """)
     
-    st.write("""
-    ### Strategies
-    """)
 
+if navigation == 'Strategies':
+    st.empty()
 
 if navigation == 'ARIMA Description':
     st.write("""
