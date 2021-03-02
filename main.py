@@ -241,14 +241,14 @@ if navigation == 'Interactive Demo!':
     st.write("""## :white_check_mark: Interactive Demo!""")
     st.write("")
 
-    forecast_period = st.slider('How far in the future would you like to forecast?', min_value=1, max_value=10, value=5, step=1)
+    forecast_period = st.slider('How far in the future would you like to forecast?', min_value=7, max_value=28, value=7, step=7)
     time_to_expiry = st.slider('What time to expiry would you like on the options?', min_value=7, max_value=28, value=14, step=7)
-    lookback_period = st.slider('How many days in the past would you like the model to lookback in order to make its predictions?', min_value=200, max_value=3000, value=365, step=10)
+    lookback_period = st.slider('How many days in the past would you like the model to lookback in order to make its predictions?', min_value=200, max_value=3000, value=700, step=10)
     
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-    p_val = st.radio("What p value would you like to use?", (0, 1, 2, 3))
-    d_val = st.radio("What d value would you like to use?", (0, 1, 2, 3))
-    q_val = st.radio("What q value would you like to use?", (0, 1, 2, 3))
+    p_val = st.radio("What p value would you like to use?", (0, 1, 2, 3), index=1)
+    d_val = st.radio("What d value would you like to use?", (0, 1, 2), index=0)
+    q_val = st.radio("What q value would you like to use?", (0, 1, 2, 3), index=0)
     
     todays_date = datetime.date.today()
     start_date = todays_date - datetime.timedelta(days=lookback_period)
@@ -259,16 +259,22 @@ if navigation == 'Interactive Demo!':
     vixData = yf.Ticker(tik)
     vixDF = vixData.history(period='1d', start=start_date, end=todays_date).drop(['Volume','Dividends','Stock Splits'], axis = 1)
 
-    st.write(f"## VIX Prediction on data since {start_date_text}")
-    st.line_chart(vixDF.Close)
-
+    # st.write(f"### VIX Prediction on data since {start_date_text}")
+    # st.line_chart(vixDF.Close)
 
     vixDF.rename(columns = {'Close':'Volatility'}, inplace = True) 
     df = pd.DataFrame(vixDF['Volatility']).dropna()
     
+    start_plot_idx = st.radio("How many days would you like to see plotted?", (200,365, 'All of them'), index=2)
 
+    if start_plot_idx == 'All of them':
+       start_plot_idx = len(df) 
+
+    const_fig_size=(10,5)
+
+    ## ARIMA for Predicting past data
     # Create Training and Test
-    num_lags = 35
+    num_lags = forecast_period
     start_bound = 0
 
     dataset_size = len(df)
@@ -278,7 +284,7 @@ if navigation == 'Interactive Demo!':
     test = df[split_idx:]
 
     # Build Model
-    model = ARIMA(train, order=(1, 0, 0))  
+    model = ARIMA(train, order=(p_val, d_val, q_val))  
     fitted = model.fit(disp=-1) 
 
     # Forecast
@@ -289,14 +295,44 @@ if navigation == 'Interactive Demo!':
     lower_series = pd.Series(conf[:, 0], index=test.index)
     upper_series = pd.Series(conf[:, 1], index=test.index)
 
+    # Plot
+    st.write(f'### Forecast vs Actuals on VIX data since {start_date_text}')
+    figure1, axes1 = plt.subplots(nrows=1, ncols=1, figsize=const_fig_size)
+    axes1.plot(train[-start_plot_idx:], label='Training',color='C0')
+    axes1.plot(test, label='Actual',color='g')
+    axes1.plot(fc_series, label='Forecast',color='C1')
+    axes1.fill_between(lower_series.index, lower_series, upper_series, color='k', alpha=.15)
+    axes1.legend(loc='upper left', fontsize=8)
+    # axes1.xaxis.set_major_locator(plt.MaxNLocator(6))
+    st.pyplot(figure1)
+
+
+    ## ARIMA for Forecasting Future data
+    num_future_days = forecast_period
+
+    # Build Model
+    model = ARIMA(df, order=(p_val, d_val, q_val))  
+    fitted = model.fit(disp=-1)  
+
+    # Forecast
+    fc2, se, conf = fitted.forecast(num_future_days, alpha=0.25)  # 75% conf
+
+    forecast_idx = pd.date_range(df.index[-1], periods=num_future_days)
+
+    # Make as pandas series
+    fc_series = pd.Series(fc2, index=forecast_idx)
+    lower_series = pd.Series(conf[:, 0], index=forecast_idx)
+    upper_series = pd.Series(conf[:, 1], index=forecast_idx)
 
     # Plot
-    # fig, ax = plt.plot(range(len(train)),train, label='training')
-    # ax.plot(test, label='actual')
-    # ax.plot(fc_series, label='forecast')
-    # ax.fill_between(lower_series.index, lower_series, upper_series, color='k', alpha=.15)
-    # ax.title('Forecast vs Actuals')
-    # ax.legend(loc='upper left', fontsize=8)
-    # ax.show() 
+    st.write(f'### Future VIX Forecast on data since {start_date_text}')
+    figure2, axes2 = plt.subplots(nrows=1, ncols=1, figsize=const_fig_size)
+    axes2.plot(df[-start_plot_idx:], label='Past VIX',color='C0')
+    axes2.plot(fc_series, label='Forecast',color='C1')
+    axes2.fill_between(lower_series.index, lower_series, upper_series, color='k', alpha=.15)
+    axes2.legend(loc='upper left', fontsize=8)
+    # axes2.xaxis.set_major_locator(plt.MaxNLocator(6))
+    st.pyplot(figure2)
 
-    # st.line_chart(plt.plot(train, label='training'))
+
+
