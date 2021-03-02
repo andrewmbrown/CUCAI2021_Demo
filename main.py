@@ -15,22 +15,33 @@ if navigation == 'Introduction':
     st.write("""
         ## Introduction
 
-        Inflation and the subsequent increased cost of living has left several people struggling to make end’s meet; 
-        more than ever before, individuals must establish multiple streams of income to support themselves and their 
-        families. The stock market has been a money-making tool for millions of people around the world, and its increased 
-        volatility during the pandemic presents several opportunities for traders and investors to generate considerable 
-        income. The SPY, an Exchange Traded Fund (ETF) compromised of securities included in the S&P 500, is up 76% from 
-        its early pandemic lows; however, there have been periods of weakness in conjunction withperiods of strength. 
-        Thus, to maximize potential returns and incomes, traders must take advantage of both upward and downward trends 
-        in the market. Option contracts can be utilized to benefit from both the adverse and favorable movements. This 
-        study researched and analyzed the Chicago Board Options Exchange (CBOE) Volatility Index, ticker symbol: VIX, a 
-        volatility index whose price is obtained from the implied volatility of various options contracts belonging to 
-        securities in the S&P 500. Stationarity and seasonality tests were conducted on the VIX dataset and accordingly 
-        an Auto-Regressive Integrated Moving Average (ARIMA) model (Figures 1 and 2) was implemented and fine-tuned to 
-        forecast the VIX. Using the VIX as an indicator of the S&P 500’s volatility, our model utilizes the forecasted 
-        volatility to establish which options trading strategy (out of a predetermined list) will yield the greatest future 
-        returns.
+        The stock market has been a money-making tool for millions of people around the world, and its increased volatility 
+        during the pandemic presents several opportunities for traders and investors to generate considerable income.
 
+        ## Our Goal
+        Our goal was to implement a model that can track these trends and pick up on patterns within the stock market. Our 
+        model is designed to analyse the recent volatility of SPY to forecast the future volatility and determine which options 
+        trading strategy (from a predetermined subset) will yield the greatest return.
+
+        The SPY, an Exchange Traded Fund (ETF) compromised of securities included in the S&P 500, is up 76% from its early pandemic 
+        lows; however, there have been periods of weakness in conjunction with periods of strength. Thus, to maximize potential 
+        returns and incomes, traders must take advantage of both upward and downward trends in the market. Option contracts can be 
+        utilized to benefit from both the adverse and favorable movements.
+
+        ## Our Solution
+        Our team researched and analyzed the Chicago Board Options Exchange (CBOE) Volatility Index (VIX). The price of the VIX is 
+        obtained from the implied volatility of various options contracts belonging to securities in the S&P 500. 
+
+    """)
+    st.image('src/VIXvsSPY.JPG')
+    st.write("""
+
+        From our analysis of the VIX and SPY, we found that when VIX sees a lage percent gain, SPY tends to be weaker. This allows
+        us to predict an options trading strategy for SPY if we are able to forcast the VIX.
+
+        Stationarity and seasonality tests were conducted on the VIX dataset and accordingly an Auto-Regressive Integrated Moving 
+        Average (ARIMA) model was implemented and fine-tuned to forecast the VIX. From there, we can suggest a strategy that will 
+        yield the greatest return.
     """)
 
 if navigation == 'Options Description':
