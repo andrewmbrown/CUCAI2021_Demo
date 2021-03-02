@@ -68,13 +68,48 @@ if navigation == 'Options Description':
         chosen strike price. Thus, a profit can be made when the stock price goes below the strike, as it essentially
         allows the contract holder to sell a stock for more than its worth.
         
-        ***
+        ## Buying v.s Selling Options
+        The notion of making profit described above in both puts and calls is in the context of buying an options contract; however, in order
+        for there to be a buyer, there must also be a seller. The seller of the contract collects the premiums of the contract and is \'assigned\' the
+        the obligation to sell/buy the shares should the buyer choose to execute. In this context, the seller makes the most profit as the 
+        premium of the contract gets closer to zero.
+
+        For instance, if a trader sold another trader a put contract with a strike of 100 while the underlying asset
+        was trading at 95, then they would net the most profit if the asset price goes above 100 close to expiration, essentially
+        rendering the contract worthless.
     
     """)
     
 
 if navigation == 'Strategies':
-    st.empty()
+    st.write("""
+        ## Strategies
+
+        The benefit of using options can be seen in the various strategies that are listed below. Their main point of attraction
+        is the ability to hedge downside risk which, in other words, means to limit the amount of money one can lose
+        if the price of the underlying stock was to move adversely to the contract conditions. The following strategies are based on
+        volatility predictions on the VIX.
+
+        Note that:
+
+        - Bullish: Optimistic on a stock's future outlook
+        - Bearish: Pessimistic on a stock's future outlook 
+    """)
+
+    st.write("""
+        ### Fairly Low Volatility (Slightly Bullish on SPY)
+
+        This strategy is called the **Long At-The-Money Call Vertical**. If the ARIMA model is forecasting the VIX will
+        have relatively the same, or slightly lower, volatility as the previous period, then one can take a slightly bullish stance on
+        SPY and deploy this strategy
+
+        It consists of buying a **CALL** at a strike price (C1) that is below the current SPY price, and selling a **CALL**  with a strike price (C2) that
+        is above the current price. This setup allows the owner of the portfolio to limit the amount of money they can lose; if the SPY goes up then the call
+        that was bought will become more valuable. Conversely, the if SPY goes down, then the call that was sold expires worthlessly and
+        the premiums collected from it will subsidize downside losses from the bought call.
+    """)
+
+    
 
 if navigation == 'ARIMA Description':
     st.write("""
