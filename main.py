@@ -109,6 +109,11 @@ if navigation == 'Strategies':
         the premiums collected from it will subsidize downside losses from the bought call.
     """)
 
+    st.image('./src/lowVolBullish.PNG')
+
+    st.write("""
+        ### Fairly High Volatility
+    """)
     
 
 if navigation == 'ARIMA Description':
