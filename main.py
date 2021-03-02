@@ -1,11 +1,14 @@
 import streamlit as st
-# import yfinance as yf
+import yfinance as yf
 import pandas as pd
 import numpy as np
+import datetime
+import matplotlib.pylab as plt  
+from statsmodels.tsa.arima_model import ARIMA
 
 st.title("Stock Options' Volatility Prediction")
 st.header("QMIND - Group 21 - March 6th, 2021")
-st.subheader("Alex Le Blanc :coffee:, Smeet Schheda :100:, Andrew Brown :raised_hands:, Tanner Dunn :sunglasses:")
+st.subheader("Alex Le Blanc :coffee:, Smeet Chheda :100:, Andrew Brown :raised_hands:, Tanner Dunn :sunglasses:")
 
 st.sidebar.title("Navigation")
 sideBarOptions = ['Introduction','Options Description', 'ARIMA Description', 'Our Solution']
@@ -87,17 +90,39 @@ if navigation == 'ARIMA Description':
     st.write('')
 
 
-
-
 if navigation == 'Our Solution':
-    st.write("""## Our Solution""")
+    
+    st.markdown("""____""")
+    st.write("""## :white_check_mark: Our Solution""")
     
     st.write("")
-    st.write("**Our ARIMA Model**")
-    st.write("After conducting our stationarity test using the Augmented-Dickey Fuller Test, analysing the ACF and PACF plots, we have determined that the optimal p,d,q hyperparameters for the VIX dataset are (1,0,0).")
+    st.write("**Determining Our ARIMA Model Parameters**")
+    st.write("""After conducting our stationarity test using the Augmented-Dickey 
+        Fuller Test, and analysing the ACF and PACF plots, we have determined that the 
+        optimal p, d, and q hyperparameters for the VIX dataset are (1, 0, 0), respectively.""")
+    
+    st.write("- *show augmented dickey-fuller test results -> discuss how this gives us d*")
+    st.write("- *show PACF plots -> discuss how this gives us p*")
+    st.write("- *show ACF plots -> discuss how this gives us q*")
+    st.write("- *Discuss how to handle over/under differencing by adjust p or q -> discuss how this gives us p?*")
+    st.write("- *show ARIMA summary results*")
+    st.write("- *show past value prediction plots*")
+    st.write("- *show future value forecast plots*")
+    st.write("- *show accuracy and other metrics results?*")
+
+
+    st.write("**ARIMA Model Prediction on VIX**")
+    st.write("- *put arima code here and show prediction plot*")
+    st.write("- *show past value prediction plots*")
+    st.write("- *show future value forecast plots*")
+    st.write("- *show accuracy and other metrics results?*")
+    st.write("- *show options strategy recommendation*")
+
 
     st.write("**Snippet of ARIMA Code**")
-    code_snippet = '''# Build Model
+    code_snippet = '''from statsmodels.tsa.arima_model import ARIMA
+
+# Build Model
 model = ARIMA(train, order=(1, 0, 0))  
 fitted = model.fit(disp=-1)  
 
@@ -120,11 +145,68 @@ plt.show();'''
     
     st.code(code_snippet,language='python')
     
-    st.write("**ARIMA Model Prediction on VIX**")
 
 
+    st.write("")
+    st.write("")
     st.write("**Interactive Demo**")
 
-    forecast_period = st.slider('How far in the future would you like to forecast', min_value=1, max_value=10, value=5, step=1)
-    time_to_expiry = st.slider('What time to expiry would you like on the options', min_value=7, max_value=28, value=14, step=7)
+    forecast_period = st.slider('How far in the future would you like to forecast?', min_value=1, max_value=10, value=5, step=1)
+    time_to_expiry = st.slider('What time to expiry would you like on the options?', min_value=7, max_value=28, value=14, step=7)
+    lookback_period = st.slider('How many days in the past would you like the model to lookback in order to make its predictions? **(hmmm... idk about this)**', min_value=200, max_value=3000, value=365, step=10)
+    
+    st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
+    p_val = st.radio("What p value would you like to use?", (0, 1, 2, 3))
+    d_val = st.radio("What d value would you like to use?", (0, 1, 2, 3))
+    q_val = st.radio("What q value would you like to use?", (0, 1, 2, 3))
+    
+    todays_date = datetime.date.today()
+    start_date = todays_date - datetime.timedelta(days=lookback_period)
+    start_date_text = start_date.strftime('%B %d, %Y')
 
+
+    tik = '^VIX'
+    vixData = yf.Ticker(tik)
+    vixDF = vixData.history(period='1d', start=start_date, end=todays_date).drop(['Volume','Dividends','Stock Splits'], axis = 1)
+
+    st.write(f"## VIX Prediction on data since {start_date_text}")
+    st.line_chart(vixDF.Close)
+
+
+    vixDF.rename(columns = {'Close':'Volatility'}, inplace = True) 
+    df = pd.DataFrame(vixDF['Volatility']).dropna()
+    
+
+    # Create Training and Test
+    num_lags = 35
+    start_bound = 0
+
+    dataset_size = len(df)
+    split_idx = len(df) - num_lags
+
+    train = df[start_bound:split_idx]
+    test = df[split_idx:]
+
+    # Build Model
+    model = ARIMA(train, order=(1, 0, 0))  
+    fitted = model.fit(disp=-1) 
+
+    # Forecast
+    fc, se, conf = fitted.forecast(num_lags, alpha=0.25)  # 75% conf
+
+    # Make as pandas series
+    fc_series = pd.Series(fc, index=test.index)
+    lower_series = pd.Series(conf[:, 0], index=test.index)
+    upper_series = pd.Series(conf[:, 1], index=test.index)
+
+
+    # Plot
+    # fig, ax = plt.plot(range(len(train)),train, label='training')
+    # ax.plot(test, label='actual')
+    # ax.plot(fc_series, label='forecast')
+    # ax.fill_between(lower_series.index, lower_series, upper_series, color='k', alpha=.15)
+    # ax.title('Forecast vs Actuals')
+    # ax.legend(loc='upper left', fontsize=8)
+    # ax.show() 
+
+    # st.line_chart(plt.plot(train, label='training'))
