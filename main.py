@@ -11,7 +11,7 @@ st.header("QMIND - Group 21 - March 6th, 2021")
 st.subheader("Alex Le Blanc :coffee:, Smeet Chheda :100:, Andrew Brown :raised_hands:, Tanner Dunn :sunglasses:")
 
 st.sidebar.title("Navigation")
-sideBarOptions = ['Introduction','Options Description', 'Strategies', 'ARIMA Description', 'Our Solution']
+sideBarOptions = ['Introduction','Options Description', 'Strategies', 'ARIMA Description', 'Our Solution', 'Interactive Demo!']
 navigation = st.sidebar.selectbox('Go To', sideBarOptions, index = 0)
 
 if navigation == 'Introduction':
@@ -177,8 +177,8 @@ if navigation == 'Our Solution':
     
     st.markdown("""____""")
     st.write("""## :white_check_mark: Our Solution""")
-    
     st.write("")
+    
     st.write("**Determining Our ARIMA Model Parameters**")
     st.write("""After conducting our stationarity test using the Augmented-Dickey 
         Fuller Test, and analysing the ACF and PACF plots, we have determined that the 
@@ -230,13 +230,15 @@ plt.show();'''
     
 
 
+if navigation == 'Interactive Demo!':
+
+    st.markdown("""____""")
+    st.write("""## :white_check_mark: Interactive Demo!""")
     st.write("")
-    st.write("")
-    st.write("**Interactive Demo**")
 
     forecast_period = st.slider('How far in the future would you like to forecast?', min_value=1, max_value=10, value=5, step=1)
     time_to_expiry = st.slider('What time to expiry would you like on the options?', min_value=7, max_value=28, value=14, step=7)
-    lookback_period = st.slider('How many days in the past would you like the model to lookback in order to make its predictions? **(hmmm... idk about this)**', min_value=200, max_value=3000, value=365, step=10)
+    lookback_period = st.slider('How many days in the past would you like the model to lookback in order to make its predictions?', min_value=200, max_value=3000, value=365, step=10)
     
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
     p_val = st.radio("What p value would you like to use?", (0, 1, 2, 3))
