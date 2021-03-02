@@ -1,5 +1,5 @@
 import streamlit as st
-# import yfinance as yf
+import yfinance as yf
 import pandas as pd
 import numpy as np
 
@@ -85,18 +85,43 @@ if navigation == 'ARIMA Description':
     st.markdown('- q: the order of the MA term')
     st.markdown('- d: the number of differencing required for stationarity')
     st.write("ARIMA model are used for time series forecasting, a class of models that explains a given time series based on its own passed values")
+    
+
+    st.write('To explain ARIMA, we explain **Stationarity**, **AR** only model, **MA** only model, and **d** (differencing) term')
+    st.subheader('Stationarity')
+    st.write('Stationarity means that the statistical properties of a process generating a time series do not change over time. In technical terms it must:')
+    st.markdown('- Have a constant mean')
+    st.markdown('- Have constant variance/standard deviation')
+    st.markdown('- Auto-covariance should not depend on time')
+    st.write('This is utmost importance for using time-series modelling, and presents a huge concern when looking at financial data. Is it stationary?')
     st.write("The team decided to apply ARIMA models to forecast the VIX, a popular known volatility index of the S&P 500")
 
     tik = '^VIX'
     vixData = yf.Ticker(tik)
     vixDF = vixData.history(period='1d', start='2010-5-31', end='2020-2-26')
 
-    st.write("## VIX Price Since 2010")
+    st.write("### VIX Price Since 2010")
     st.line_chart(vixDF.Close)
+    st.write('We must preprocess this data, giving it a constant mean, variance, and standard deviation')
+    
+    st.subheader('AR Only Model')
+    st.write('AR (Auto Regressive) models forecast only depending on its own lags')
+    st.markdown('$Y_t=a+B_1Y_{t-1}+B_2Y_{t-2}+...+B_pY_{t-p}+\epsilon_1$')
+    st.write('Where $Y_{t-1}$ is the lag1 of the series with beta being the coeficient. $a$ is the intercept term')
+    
+    st.subheader('MA Only Model')
+    st.write('MA (Moving Average) models forecast on the errors(residuals) of the previous forecasts you made to make current forecasts')
+    st.markdown('$Y_t=a+\epsilon_t+\phi_1\epsilon_{t-1}++\phi_2\epsilon_{t-2}+...+\phi_q\epsilon_{t-q}$')
 
-    st.write('')
+    st.subheader('Differencing Parameter d')
+    st.write('We difference a time series to make it stationary')
+    st.markdown('This is usually through taking values and subtracting them from previous values. Depending on how far back the values are differenced, this is called first, second, third... differencing')
+    st.image('./src/differencing.png')
 
-
+    st.subheader('ARIMA - Combining the AR, MA, and d')
+    st.write('We achieve a model that predicts using its own lags *and* using its errors of previous forecasts')
+    st.markdown('$Y_t=a+B_1Y_{t-1}+...+B_pY_{t-p}\epsilon_t+\phi_1\epsilon_{t-1}+\phi_2\epsilon_{t-2}...+\phi_q\epsilon_{t-q}$')
+    st.markdown('Predicted Yt = Constant + Linear combination Lags of Y (upto p lags) + Linear Combination of Lagged forecast errors (upto q lags)')
 
 
 if navigation == 'Our Solution':
