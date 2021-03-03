@@ -6,7 +6,7 @@ import datetime
 import matplotlib.pylab as plt  
 from statsmodels.tsa.arima_model import ARIMA
 
-st.title("Stock Options' Volatility Prediction")
+st.title("Stock Options' Volatility Prediction :chart_with_upwards_trend:")
 st.header("QMIND - Group 21 - March 6th, 2021")
 st.subheader("Alex Le Blanc :coffee:, Smeet Chheda :100:, Andrew Brown :raised_hands:, Tanner Dunn :sunglasses:")
 
@@ -275,12 +275,11 @@ if navigation == 'Interactive Demo!':
     ## ARIMA for Predicting past data
     # Create Training and Test
     num_lags = forecast_period
-    start_bound = 0
 
     dataset_size = len(df)
     split_idx = len(df) - num_lags
 
-    train = df[start_bound:split_idx]
+    train = df[:split_idx+1]
     test = df[split_idx:]
 
     # Build Model
