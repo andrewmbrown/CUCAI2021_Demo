@@ -6,12 +6,12 @@ import datetime
 import matplotlib.pylab as plt  
 from statsmodels.tsa.arima_model import ARIMA
 
-st.title("Stock Options' Volatility Prediction")
+st.title("Stock Options' Volatility Prediction :chart_with_upwards_trend:")
 st.header("QMIND - Group 21 - March 6th, 2021")
 st.subheader("Alex Le Blanc :coffee:, Smeet Chheda :100:, Andrew Brown :raised_hands:, Tanner Dunn :sunglasses:")
 
 st.sidebar.title("Navigation")
-sideBarOptions = ['Introduction','Options Description', 'Strategies', 'ARIMA Description', 'Our Solution']
+sideBarOptions = ['Introduction','Options Description', 'Strategies', 'ARIMA Description', 'Our Solution', 'Interactive Demo!']
 navigation = st.sidebar.selectbox('Go To', sideBarOptions, index = 0)
 
 if navigation == 'Introduction':
@@ -48,8 +48,10 @@ if navigation == 'Introduction':
     """)
 
 if navigation == 'Options Description':
+    st.markdown("""____""")
+
     st.write("""
-        ## What are options?
+        ## :thinking_face: What are options?
 
         Stock market volatility has been a heavily 
         discussed topic ever since the inception of the market in the early 1600s. Most people assume that the only time
@@ -96,8 +98,10 @@ if navigation == 'Options Description':
     
 
 if navigation == 'Strategies':
+    st.markdown("""____""")
+
     st.write("""
-        ## Strategies
+        ## :brain: Strategies
 
         The benefit of using options can be seen in the various strategies that are listed below. Their main point of attraction
         is the ability to hedge downside risk which, in other words, means to limit the amount of money one can lose
@@ -111,13 +115,34 @@ if navigation == 'Strategies':
     """)
 
     st.write("""
+        ### Low Volatility (Bullish on SPY)
+
+        This strategy is called the **Married Put**. If the ARIMA is forecasting the VIX to have lower volatility in the chosed period,
+        then one can expect the SPY to be strong in that same period. In this case, the Married Put is provides the best way to hedge against the downside.
+
+        This set up will be slightly different than the ones to follow in that it involves the purchase of **shares** alongside the option contract.
+        The trader deploying this stratgy will purchase **shares** of SPY with the expectation that they will grow in value, while also
+        purchasing **puts** with a strike price near the price at which the shares were purchased.
+    """)
+
+    st.image('./src/marriedPut.png')
+
+    st.write("""
+        The picture above illustrates the benefit of using this stratgy as opposed to purchasing the shares or puts alone.
+        The dotted line labelled \'stock only\' shows the profit and loss scenario when purchasing just shares; the downside loss
+        is not bounded and leaves investors with the potential to lose their entire position. The put, on the other hand would not make 
+        sense, if one were to have a bullish position on SPY.  By purchasing both, the trader will net profit if the VIX forecast is accurate,
+        but will protect his downside by earning profit via the put if the forecast proves to be inaccurate.
+    """)
+    
+    st.write("""
         ### Fairly Low Volatility (Slightly Bullish on SPY)
 
         This strategy is called the **Long At-The-Money Call Vertical**. If the ARIMA model is forecasting the VIX will
         have relatively the same, or slightly lower, volatility as the previous period, then one can take a slightly bullish stance on
         SPY and deploy this strategy
 
-        It consists of buying a **CALL** at a strike price (C1) that is below the current SPY price, and selling a **CALL**  with a strike price (C2) that
+        It consists of buying a **call** at a strike price (C1) that is below the current SPY price, and selling a **call**  with a strike price (C2) that
         is above the current price. This setup allows the owner of the portfolio to limit the amount of money they can lose; if the SPY goes up then the call
         that was bought will become more valuable. Conversely, the if SPY goes down, then the call that was sold expires worthlessly and
         the premiums collected from it will subsidize downside losses from the bought call.
@@ -126,8 +151,23 @@ if navigation == 'Strategies':
     st.image('./src/lowVolBullish.PNG')
 
     st.write("""
-        ### Fairly High Volatility
+        ### High Volatility (Bearish on SPY)
+
+        This strategy is refered to as the **Long At-The-Money Put Vertical**. As opposed to the strategy above, this strategy
+        would be useful when the VIX is forecasted to be high relative to the prior week, and thus indicating that SPY may see
+        some bad market days in the coming forecasting period.
+
+        The set up is nearly identical to the **call** version of this stratgy in that one must do 2 transactions:
+        *buy* a **put** with a strike price (P1) higher than the current price of SPY, and *sell* a **put** with a strike price (P2) under the
+        price of SPY.
+
+        Risk-reward in this situation is similar to above, but with a bearish outlook. The trader can hedge his downside losses,
+        in the case of SPY seeing percentage gains in the contract period, with the premiums they collect from selling a put with a strike
+        lower than what they owned.
     """)
+    
+    st.image('./src/longAtmPutVert.png')
+
     
 
 if navigation == 'ARIMA Description':
@@ -187,14 +227,22 @@ if navigation == 'Our Solution':
     
     st.markdown("""____""")
     st.write("""## :white_check_mark: Our Solution""")
-    
     st.write("")
+    
     st.write("**Determining Our ARIMA Model Parameters**")
     st.write("""After conducting our stationarity test using the Augmented-Dickey 
         Fuller Test, and analysing the ACF and PACF plots, we have determined that the 
-        optimal p, d, and q hyperparameters for the VIX dataset are (1, 0, 0), respectively.""")
+        optimal **p**, **d**, and **q** hyperparameters for the VIX dataset are (1, 0, 0), respectively.""")
     
-    st.write("- *show augmented dickey-fuller test results -> discuss how this gives us d*")
+    st.write("""The following image displays the results of the Augmented Dickey-Fuller Test. It was deployed in order to check stationarity and determine the **d** hyperparameter;
+    if it displays a p-value below 0.05, one may assume the data the test was conducted upon is stationary according to the
+    definition stated in the \'ARIMA Description\' section. The number of differencing required to reach stationarity reflects an
+    appropriate value for the **d** hyperparameter. The results for the unaltered VIX historical data can be seen below:""")
+    st.image('./src/ADFResults.PNG')
+    st.write("""
+        The unaltered data had a p-value of 0.000789, indicating that no differencing was necessary in order to achieve stationarity. Thus, a value of 1 was assgined to **d** going forward    
+    """)
+
     st.write("- *show PACF plots -> discuss how this gives us p*")
     st.write("- *show ACF plots -> discuss how this gives us q*")
     st.write("- *Discuss how to handle over/under differencing by adjust p or q -> discuss how this gives us p?*")
@@ -240,18 +288,21 @@ plt.show();'''
     
 
 
-    st.write("")
-    st.write("")
-    st.write("**Interactive Demo**")
+if navigation == 'Interactive Demo!':
 
-    forecast_period = st.slider('How far in the future would you like to forecast?', min_value=1, max_value=10, value=5, step=1)
-    time_to_expiry = st.slider('What time to expiry would you like on the options?', min_value=7, max_value=28, value=14, step=7)
-    lookback_period = st.slider('How many days in the past would you like the model to lookback in order to make its predictions? **(hmmm... idk about this)**', min_value=200, max_value=3000, value=365, step=10)
+    st.markdown("""____""")
+    st.write("""## :video_game: Interactive Demo!""")
+    st.write("")
+
+    max_time_to_expiry = 28
+
+    time_to_expiry = st.slider('How far in the future would you like to forecast (i.e.: what is your desired time to expiry on your contracts)?', min_value=7, max_value=max_time_to_expiry, value=7, step=7)
+    lookback_period = st.slider('How many days in the past would you like the model to lookback in order to make its predictions?', min_value=200, max_value=3000, value=700, step=10)
     
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
-    p_val = st.radio("What p value would you like to use?", (0, 1, 2, 3))
-    d_val = st.radio("What d value would you like to use?", (0, 1, 2, 3))
-    q_val = st.radio("What q value would you like to use?", (0, 1, 2, 3))
+    p_val = st.radio("What p value would you like to use?", (0, 1, 2, 3), index=1)
+    d_val = st.radio("What d value would you like to use?", (0, 1, 2), index=0)
+    q_val = st.radio("What q value would you like to use?", (0, 1, 2, 3), index=0)
     
     todays_date = datetime.date.today()
     start_date = todays_date - datetime.timedelta(days=lookback_period)
@@ -262,44 +313,93 @@ plt.show();'''
     vixData = yf.Ticker(tik)
     vixDF = vixData.history(period='1d', start=start_date, end=todays_date).drop(['Volume','Dividends','Stock Splits'], axis = 1)
 
-    st.write(f"## VIX Prediction on data since {start_date_text}")
-    st.line_chart(vixDF.Close)
-
+    # st.write(f"### VIX Prediction on data since {start_date_text}")
+    # st.line_chart(vixDF.Close)
 
     vixDF.rename(columns = {'Close':'Volatility'}, inplace = True) 
     df = pd.DataFrame(vixDF['Volatility']).dropna()
     
+    start_plot_idx = st.radio("How many days would you like to see plotted?", (200,365, 'All of them'), index=2)
 
+    if start_plot_idx == 'All of them':
+       start_plot_idx = len(df) 
+
+    const_fig_size=(10,5)
+
+    ## ARIMA for Predicting past data
     # Create Training and Test
-    num_lags = 35
-    start_bound = 0
-
     dataset_size = len(df)
-    split_idx = len(df) - num_lags
+    split_idx = len(df) - time_to_expiry
 
-    train = df[start_bound:split_idx]
+    train = df[:split_idx+1]
     test = df[split_idx:]
 
     # Build Model
-    model = ARIMA(train, order=(1, 0, 0))  
+    model = ARIMA(train, order=(p_val, d_val, q_val))  
     fitted = model.fit(disp=-1) 
 
     # Forecast
-    fc, se, conf = fitted.forecast(num_lags, alpha=0.25)  # 75% conf
+    fc, se, conf = fitted.forecast(time_to_expiry, alpha=0.25)  # 75% conf
 
     # Make as pandas series
     fc_series = pd.Series(fc, index=test.index)
     lower_series = pd.Series(conf[:, 0], index=test.index)
     upper_series = pd.Series(conf[:, 1], index=test.index)
 
+    # Plot
+    st.write(f'### Forecast vs Actuals on VIX data since {start_date_text}')
+    figure1, axes1 = plt.subplots(nrows=1, ncols=1, figsize=const_fig_size)
+    axes1.plot(train[-start_plot_idx:], label='Training',color='C0')
+    axes1.plot(test, label='Actual',color='g')
+    axes1.plot(fc_series, label='Forecast',color='C1')
+    axes1.fill_between(lower_series.index, lower_series, upper_series, color='k', alpha=.15)
+    axes1.legend(loc='upper left', fontsize=8)
+    # axes1.xaxis.set_major_locator(plt.MaxNLocator(6))
+    st.pyplot(figure1)
+
+
+    ## ARIMA for Forecasting Future data
+    # Build Model
+    model = ARIMA(df, order=(p_val, d_val, q_val))  
+    fitted = model.fit(disp=-1)  
+
+    # Forecast
+    fc2, se, conf = fitted.forecast(time_to_expiry, alpha=0.25)  # 75% conf
+
+    forecast_idx = pd.date_range(df.index[-1], periods=time_to_expiry)
+
+    # Make as pandas series
+    fc_series = pd.Series(fc2, index=forecast_idx)
+    lower_series = pd.Series(conf[:, 0], index=forecast_idx)
+    upper_series = pd.Series(conf[:, 1], index=forecast_idx)
 
     # Plot
-    # fig, ax = plt.plot(range(len(train)),train, label='training')
-    # ax.plot(test, label='actual')
-    # ax.plot(fc_series, label='forecast')
-    # ax.fill_between(lower_series.index, lower_series, upper_series, color='k', alpha=.15)
-    # ax.title('Forecast vs Actuals')
-    # ax.legend(loc='upper left', fontsize=8)
-    # ax.show() 
+    st.write(f'### Future VIX Forecast on data since {start_date_text}')
+    figure2, axes2 = plt.subplots(nrows=1, ncols=1, figsize=const_fig_size)
+    axes2.plot(df[-start_plot_idx:], label='Past VIX',color='C0')
+    axes2.plot(fc_series, label='Forecast',color='C1')
+    axes2.fill_between(lower_series.index, lower_series, upper_series, color='k', alpha=.15)
+    axes2.legend(loc='upper left', fontsize=8)
+    # axes2.xaxis.set_major_locator(plt.MaxNLocator(6))
+    st.pyplot(figure2)
 
-    # st.line_chart(plt.plot(train, label='training'))
+
+    # Decision/Recommendation Algorithm
+    st.write("")
+    st.write(f"### Trading Strategy Recommendation for options expiring in {time_to_expiry} days:")
+    volatility_difference = fc2[-1] - fc2[0]
+    volatility_range = df[-50:].mean()[0]
+    time_to_expiry_volatility_factor = time_to_expiry/(max_time_to_expiry+10) + 1
+    volatility_score = np.abs(2 * volatility_difference * time_to_expiry_volatility_factor / volatility_range)
+    
+    # st.write(volatility_difference)
+    # st.write(volatility_range)
+    # st.write(time_to_expiry_volatility_factor)
+    # st.write(volatility_score)
+
+    if volatility_score > 0.35:
+        st.write("## :point_right: *Use a **Long At-The-Money Put Vertical** (High Volatility Strategy)!*")
+    elif volatility_score > 0.12:
+        st.write("## :point_right: *Use a **Long At-The-Money Call Vertical** (Fairly Low Volatility Strategy)!*")
+    else:
+        st.write("## :point_right: *Use a **Married Put** (Low Volatility Strategy)!*")
