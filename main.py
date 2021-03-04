@@ -281,8 +281,10 @@ if navigation == 'Interactive Demo!':
     st.write("""## :white_check_mark: Interactive Demo!""")
     st.write("")
 
-    forecast_period = st.slider('How far in the future would you like to forecast?', min_value=7, max_value=28, value=7, step=7)
-    time_to_expiry = st.slider('What time to expiry would you like on the options?', min_value=7, max_value=28, value=14, step=7)
+    max_time_to_expiry = 28
+
+    forecast_period = st.slider('How far in the future would you like to forecast?', min_value=7, max_value=max_time_to_expiry, value=7, step=7)
+    time_to_expiry = st.slider('What time to expiry would you like on the options?', min_value=7, max_value=max_time_to_expiry, value=7, step=7)
     lookback_period = st.slider('How many days in the past would you like the model to lookback in order to make its predictions?', min_value=200, max_value=3000, value=700, step=10)
     
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
@@ -374,4 +376,23 @@ if navigation == 'Interactive Demo!':
     st.pyplot(figure2)
 
 
+    # Decision/Recommendation Algorithm
+    st.write(f"### Trading Strategy Recommendation for options expiring in {time_to_expiry} days:")
+    volatility_difference = fc2[-1] - fc2[0]
+    volatility_range = df[-50:].mean()[0]
+    time_to_expiry_volatility_factor = time_to_expiry/(max_time_to_expiry) + 1
+    volatility_score = np.abs(2 * volatility_difference * time_to_expiry_volatility_factor / volatility_range)
+    
+    st.write(volatility_difference)
+    st.write(volatility_range)
+    st.write(time_to_expiry_volatility_factor)
+    st.write(volatility_score)
 
+    if volatility_score > 0.4:
+        st.write("## :point_right: *Use a High Volatility Strategy!*")
+    elif volatility_score > 0.2:
+        st.write("## :point_right: *Use a Somewhat High Volatility Strategy!*")
+    elif volatility_score > 0.05:
+        st.write("## :point_right: *Use a Somewhat Low Volatility Strategy!*")
+    else:
+        st.write("## :point_right: *Use a Low Volatility Strategy!*")
