@@ -111,13 +111,34 @@ if navigation == 'Strategies':
     """)
 
     st.write("""
+        ### Low Volatility (Bullish on SPY)
+
+        This strategy is called the **Married Put**. If the ARIMA is forecasting the VIX to have lower volatility in the chosed period,
+        then one can expect the SPY to be strong in that same period. In this case, the Married Put is provides the best way to hedge against the downside.
+
+        This set up will be slightly different than the ones to follow in that it involves the purchase of **shares** alongside the option contract.
+        The trader deploying this stratgy will purchase **shares** of SPY with the expectation that they will grow in value, while also
+        purchasing **puts** with a strike price near the price at which the shares were purchased.
+    """)
+
+    st.image('./src/marriedPut.png')
+
+    st.write("""
+        The picture above illustrates the benefit of using this stratgy as opposed to purchasing the shares or puts alone.
+        The dotted line labelled \'stock only\' shows the profit and loss scenario when purchasing just shares; the downside loss
+        is not bounded and leaves investors with the potential to lose their entire position. The put, on the other hand would not make 
+        sense, if one were to have a bullish position on SPY.  By purchasing both, the trader will net profit if the VIX forecast is accurate,
+        but will protect his downside by earning profit via the put if the forecast proves to be inaccurate.
+    """)
+    
+    st.write("""
         ### Fairly Low Volatility (Slightly Bullish on SPY)
 
         This strategy is called the **Long At-The-Money Call Vertical**. If the ARIMA model is forecasting the VIX will
         have relatively the same, or slightly lower, volatility as the previous period, then one can take a slightly bullish stance on
         SPY and deploy this strategy
 
-        It consists of buying a **CALL** at a strike price (C1) that is below the current SPY price, and selling a **CALL**  with a strike price (C2) that
+        It consists of buying a **call** at a strike price (C1) that is below the current SPY price, and selling a **call**  with a strike price (C2) that
         is above the current price. This setup allows the owner of the portfolio to limit the amount of money they can lose; if the SPY goes up then the call
         that was bought will become more valuable. Conversely, the if SPY goes down, then the call that was sold expires worthlessly and
         the premiums collected from it will subsidize downside losses from the bought call.
@@ -126,8 +147,23 @@ if navigation == 'Strategies':
     st.image('./src/lowVolBullish.PNG')
 
     st.write("""
-        ### Fairly High Volatility
+        ### High Volatility (Bearish on SPY)
+
+        This strategy is refered to as the **Long At-The-Money Put Vertical**. As opposed to the strategy above, this strategy
+        would be useful when the VIX is forecasted to be high relative to the prior week, and thus indicating that SPY may see
+        some bad market days in the coming forecasting period.
+
+        The set up is nearly identical to the **call** version of this stratgy in that one must do 2 transactions:
+        *buy* a **put** with a strike price (P1) higher than the current price of SPY, and *sell* a **put** with a strike price (P2) under the
+        price of SPY.
+
+        Risk-reward in this situation is similar to above, but with a bearish outlook. The trader can hedge his downside losses,
+        in the case of SPY seeing percentage gains in the contract period, with the premiums they collect from selling a put with a strike
+        lower than what they owned.
     """)
+    
+    st.image('./src/longAtmPutVert.png')
+
     
 
 if navigation == 'ARIMA Description':
