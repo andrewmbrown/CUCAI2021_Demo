@@ -278,7 +278,7 @@ plt.show();'''
 if navigation == 'Interactive Demo!':
 
     st.markdown("""____""")
-    st.write("""## :white_check_mark: Interactive Demo!""")
+    st.write("""## :video_game: Interactive Demo!""")
     st.write("")
 
     max_time_to_expiry = 28
@@ -372,10 +372,11 @@ if navigation == 'Interactive Demo!':
 
 
     # Decision/Recommendation Algorithm
+    st.write("")
     st.write(f"### Trading Strategy Recommendation for options expiring in {time_to_expiry} days:")
     volatility_difference = fc2[-1] - fc2[0]
     volatility_range = df[-50:].mean()[0]
-    time_to_expiry_volatility_factor = time_to_expiry/(max_time_to_expiry) + 1
+    time_to_expiry_volatility_factor = time_to_expiry/(max_time_to_expiry+10) + 1
     volatility_score = np.abs(2 * volatility_difference * time_to_expiry_volatility_factor / volatility_range)
     
     # st.write(volatility_difference)
@@ -385,7 +386,7 @@ if navigation == 'Interactive Demo!':
 
     if volatility_score > 0.35:
         st.write("## :point_right: *Use a **Long At-The-Money Put Vertical** (High Volatility Strategy)!*")
-    elif volatility_score > 0.1:
+    elif volatility_score > 0.12:
         st.write("## :point_right: *Use a **Long At-The-Money Call Vertical** (Fairly Low Volatility Strategy)!*")
     else:
         st.write("## :point_right: *Use a **Married Put** (Low Volatility Strategy)!*")
