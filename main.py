@@ -48,8 +48,10 @@ if navigation == 'Introduction':
     """)
 
 if navigation == 'Options Description':
+    st.markdown("""____""")
+
     st.write("""
-        ## What are options?
+        ## :thinking_face: What are options?
 
         Stock market volatility has been a heavily 
         discussed topic ever since the inception of the market in the early 1600s. Most people assume that the only time
@@ -96,8 +98,10 @@ if navigation == 'Options Description':
     
 
 if navigation == 'Strategies':
+    st.markdown("""____""")
+
     st.write("""
-        ## Strategies
+        ## :brain: Strategies
 
         The benefit of using options can be seen in the various strategies that are listed below. Their main point of attraction
         is the ability to hedge downside risk which, in other words, means to limit the amount of money one can lose
