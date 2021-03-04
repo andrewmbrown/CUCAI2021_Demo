@@ -227,9 +227,17 @@ if navigation == 'Our Solution':
     st.write("**Determining Our ARIMA Model Parameters**")
     st.write("""After conducting our stationarity test using the Augmented-Dickey 
         Fuller Test, and analysing the ACF and PACF plots, we have determined that the 
-        optimal p, d, and q hyperparameters for the VIX dataset are (1, 0, 0), respectively.""")
+        optimal **p**, **d**, and **q** hyperparameters for the VIX dataset are (1, 0, 0), respectively.""")
     
-    st.write("- *show augmented dickey-fuller test results -> discuss how this gives us d*")
+    st.write("""The following image displays the results of the Augmented Dickey-Fuller Test. It was deployed in order to check stationarity and determine the **d** hyperparameter;
+    if it displays a p-value below 0.05, one may assume the data the test was conducted upon is stationary according to the
+    definition stated in the \'ARIMA Description\' section. The number of differencing required to reach stationarity reflects an
+    appropriate value for the **d** hyperparameter. The results for the unaltered VIX historical data can be seen below:""")
+    st.image('./src/ADFResults.PNG')
+    st.write("""
+        The unaltered data had a p-value of 0.000789, indicating that no differencing was necessary in order to achieve stationarity. Thus, a value of 1 was assgined to **d** going forward    
+    """)
+
     st.write("- *show PACF plots -> discuss how this gives us p*")
     st.write("- *show ACF plots -> discuss how this gives us q*")
     st.write("- *Discuss how to handle over/under differencing by adjust p or q -> discuss how this gives us p?*")
