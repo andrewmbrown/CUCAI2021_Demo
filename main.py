@@ -131,6 +131,11 @@ if navigation == 'Strategies':
     
 
 if navigation == 'ARIMA Description':
+    # TODO
+    # finding p,q,d pacf plots...
+    # auto arima
+    # Augmented dickie fuller
+    st.markdown("""____""")
     st.write("""
     ## ARIMA Description
     An ARIMA model stands for 'Auto Regressive Integrated Moving Average' it has 3 hyper-paramters:
