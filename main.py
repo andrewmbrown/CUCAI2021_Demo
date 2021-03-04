@@ -291,8 +291,7 @@ if navigation == 'Interactive Demo!':
 
     max_time_to_expiry = 28
 
-    forecast_period = st.slider('How far in the future would you like to forecast?', min_value=7, max_value=max_time_to_expiry, value=7, step=7)
-    time_to_expiry = st.slider('What time to expiry would you like on the options?', min_value=7, max_value=max_time_to_expiry, value=7, step=7)
+    time_to_expiry = st.slider('How far in the future would you like to forecast (i.e.: what is your desired time to expiry on your contracts)?', min_value=7, max_value=max_time_to_expiry, value=7, step=7)
     lookback_period = st.slider('How many days in the past would you like the model to lookback in order to make its predictions?', min_value=200, max_value=3000, value=700, step=10)
     
     st.write('<style>div.row-widget.stRadio > div{flex-direction:row;}</style>', unsafe_allow_html=True)
@@ -324,10 +323,8 @@ if navigation == 'Interactive Demo!':
 
     ## ARIMA for Predicting past data
     # Create Training and Test
-    num_lags = forecast_period
-
     dataset_size = len(df)
-    split_idx = len(df) - num_lags
+    split_idx = len(df) - time_to_expiry
 
     train = df[:split_idx+1]
     test = df[split_idx:]
@@ -337,7 +334,7 @@ if navigation == 'Interactive Demo!':
     fitted = model.fit(disp=-1) 
 
     # Forecast
-    fc, se, conf = fitted.forecast(num_lags, alpha=0.25)  # 75% conf
+    fc, se, conf = fitted.forecast(time_to_expiry, alpha=0.25)  # 75% conf
 
     # Make as pandas series
     fc_series = pd.Series(fc, index=test.index)
@@ -357,16 +354,14 @@ if navigation == 'Interactive Demo!':
 
 
     ## ARIMA for Forecasting Future data
-    num_future_days = forecast_period
-
     # Build Model
     model = ARIMA(df, order=(p_val, d_val, q_val))  
     fitted = model.fit(disp=-1)  
 
     # Forecast
-    fc2, se, conf = fitted.forecast(num_future_days, alpha=0.25)  # 75% conf
+    fc2, se, conf = fitted.forecast(time_to_expiry, alpha=0.25)  # 75% conf
 
-    forecast_idx = pd.date_range(df.index[-1], periods=num_future_days)
+    forecast_idx = pd.date_range(df.index[-1], periods=time_to_expiry)
 
     # Make as pandas series
     fc_series = pd.Series(fc2, index=forecast_idx)
@@ -391,16 +386,14 @@ if navigation == 'Interactive Demo!':
     time_to_expiry_volatility_factor = time_to_expiry/(max_time_to_expiry) + 1
     volatility_score = np.abs(2 * volatility_difference * time_to_expiry_volatility_factor / volatility_range)
     
-    st.write(volatility_difference)
-    st.write(volatility_range)
-    st.write(time_to_expiry_volatility_factor)
-    st.write(volatility_score)
+    # st.write(volatility_difference)
+    # st.write(volatility_range)
+    # st.write(time_to_expiry_volatility_factor)
+    # st.write(volatility_score)
 
-    if volatility_score > 0.4:
-        st.write("## :point_right: *Use a High Volatility Strategy!*")
-    elif volatility_score > 0.2:
-        st.write("## :point_right: *Use a Somewhat High Volatility Strategy!*")
-    elif volatility_score > 0.05:
-        st.write("## :point_right: *Use a Somewhat Low Volatility Strategy!*")
+    if volatility_score > 0.35:
+        st.write("## :point_right: *Use a **Long At-The-Money Put Vertical** (High Volatility Strategy)!*")
+    elif volatility_score > 0.1:
+        st.write("## :point_right: *Use a **Long At-The-Money Call Vertical** (Fairly Low Volatility Strategy)!*")
     else:
-        st.write("## :point_right: *Use a Low Volatility Strategy!*")
+        st.write("## :point_right: *Use a **Married Put** (Low Volatility Strategy)!*")
