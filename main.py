@@ -171,28 +171,27 @@ if navigation == 'Strategies':
     
 
 if navigation == 'ARIMA Description':
-    # TODO
-    # finding p,q,d pacf plots...
-    # auto arima
-    # Augmented dickie fuller
     st.markdown("""____""")
     st.write("""
-    ## ARIMA Description
+    ## ARIMA Description :woman-raising-hand: :man-raising-hand:
     An ARIMA model stands for 'Auto Regressive Integrated Moving Average' it has 3 hyper-paramters:
     """)
     st.markdown('- p: the order of the AR term')
     st.markdown('- q: the order of the MA term')
     st.markdown('- d: the number of differencing required for stationarity')
-    st.write("ARIMA model are used for time series forecasting, a class of models that explains a given time series based on its own passed values")
+    st.write("We must find these 3 parameters to use ARIMA for time series forecasting, a class of models that explains a given time series based on its own passed values")
     
 
     st.write('To explain ARIMA, we explain **Stationarity**, **AR** only model, **MA** only model, and **d** (differencing) term')
-    st.subheader('Stationarity')
+    st.subheader('Stationarity :bar_chart:')
     st.write('Stationarity means that the statistical properties of a process generating a time series do not change over time. In technical terms it must:')
     st.markdown('- Have a constant mean')
     st.markdown('- Have constant variance/standard deviation')
     st.markdown('- Auto-covariance should not depend on time')
-    st.write('This is utmost importance for using time-series modelling, and presents a huge concern when looking at financial data. Is it stationary?')
+    st.write('This is of utmost importance for using time-series modelling, and presents a huge concern when looking at financial data. Is it stationary?')
+    st.write('To check for stationarity we can either use **Rolling Statistics (visual analysis)** or a **Stationary Dickie-Fuller Test**')
+    st.write('**Rolling Statistics**: graphing the data and visually checking for 3 criteria of stationarity')
+    st.write('**Dickie-Fuller Test**: Set a Null hypothesis says that a data is non-stationary. Using statistics libraries we check for confidence in stationarity. if p<0.05 we reject H0 and assume stationary')
     st.write("The team decided to apply ARIMA models to forecast the VIX, a popular known volatility index of the S&P 500")
 
     tik = '^VIX'
@@ -203,25 +202,43 @@ if navigation == 'ARIMA Description':
     st.line_chart(vixDF.Close)
     st.write('We must preprocess this data, giving it a constant mean, variance, and standard deviation')
     
-    st.subheader('AR Only Model')
+    st.subheader('AR Only Model :chart_with_upwards_trend:')
     st.write('AR (Auto Regressive) models forecast only depending on its own lags')
     st.markdown('$Y_t=a+B_1Y_{t-1}+B_2Y_{t-2}+...+B_pY_{t-p}+\epsilon_1$')
     st.write('Where $Y_{t-1}$ is the lag1 of the series with beta being the coeficient. $a$ is the intercept term')
     
-    st.subheader('MA Only Model')
+    st.subheader('MA Only Model :chart_with_downwards_trend:')
     st.write('MA (Moving Average) models forecast on the errors(residuals) of the previous forecasts you made to make current forecasts')
     st.markdown('$Y_t=a+\epsilon_t+\phi_1\epsilon_{t-1}++\phi_2\epsilon_{t-2}+...+\phi_q\epsilon_{t-q}$')
 
-    st.subheader('Differencing Parameter d')
+    st.subheader('Differencing Parameter d :microscope:')
     st.write('We difference a time series to make it stationary')
     st.markdown('This is usually through taking values and subtracting them from previous values. Depending on how far back the values are differenced, this is called first, second, third... differencing')
-    st.image('./src/differencing.png')
 
-    st.subheader('ARIMA - Combining the AR, MA, and d')
+    st.subheader('ARIMA - Combining the AR, MA, and d :world_map:')
     st.write('We achieve a model that predicts using its own lags *and* using its errors of previous forecasts')
     st.markdown('$Y_t=a+B_1Y_{t-1}+...+B_pY_{t-p}\epsilon_t+\phi_1\epsilon_{t-1}+\phi_2\epsilon_{t-2}...+\phi_q\epsilon_{t-q}$')
     st.markdown('Predicted Yt = Constant + Linear combination Lags of Y (upto p lags) + Linear Combination of Lagged forecast errors (upto q lags)')
 
+    st.write('Now we understand that we understand the model, we must find **p**, **q**, **d** to use ARIMA')
+    st.subheader('Finding p and q :question:')
+    st.write('To find p and q we use two functions:')
+    st.markdown('- ACF (Auto Correlation Function) to find p')
+    st.markdown('- PACF (Partial Auto Correlation Function) to find q')
+    st.write('Plots of the ACF and PACF show us when which value in x-axis, our line plot drops to 0 in y-axis for 1st time.')
+    st.image('./src/acf_pacf_example.png')
+    st.write('This figure above shows an example of when p and q are both 2. The line plots cross x=0 at y=2')
+
+    st.subheader('Finding d :question:')
+    st.write('Finding d (order of differencing) is trickier as it is more dependent on the nature of the data')
+    st.write('If our data is already stationary, we do not need any differencing (d=0)')
+    st.write('If the data is not stationary, we attempt to take the first, second, third... difference in the data to achieve stationarity')
+    st.write('After applying first, second, or third differencing, we use the previously mentioned Rolling Statistics or Dickie-Fuller test to check for stationarity')
+    st.image('./src/differencing.png')
+    st.write('An example of applying first and second differencing. The higher we difference the better the stationarity gets **but** the more intuitiveness we lose in the data for prediction')
+
+    st.write('After finding p, q, d we are good to go! Happy time-series forecasting :smile:')
+    st.write(':100::100::100::100::100::100::100::100::100::100::100::100::100::100::100::100::100::100::100::100::100::100::100::100::100::100::100::100::100:')
 
 if navigation == 'Our Solution':
     
