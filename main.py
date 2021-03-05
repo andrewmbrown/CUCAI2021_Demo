@@ -263,10 +263,6 @@ if navigation == 'Our Solution':
     st.write("- *show PACF plots -> discuss how this gives us p*")
     st.write("- *show ACF plots -> discuss how this gives us q*")
     st.write("- *Discuss how to handle over/under differencing by adjust p or q -> discuss how this gives us p?*")
-    st.write("- *show ARIMA summary results*")
-    st.write("- *show past value prediction plots*")
-    st.write("- *show future value forecast plots*")
-    st.write("- *show accuracy and other metrics results?*")
 
 
     st.write("**ARIMA Model Prediction on VIX**")
@@ -278,10 +274,24 @@ if navigation == 'Our Solution':
 
 
     st.write("**Snippet of ARIMA Code**")
-    code_snippet = '''from statsmodels.tsa.arima_model import ARIMA
+    code_snippet = '''# Download VIX Dataset
+tik = '^VIX'
+vixData = yf.Ticker(tik)
+vixDF = vixData.history(period='1d', start=start_date, end=todays_date).drop(['Volume','Dividends','Stock Splits'], axis = 1)
+
+vixDF.rename(columns = {'Close':'Volatility'}, inplace = True) 
+df = pd.DataFrame(vixDF['Volatility']).dropna()
+
+# Create Training and Test
+dataset_size = len(df)
+time_to_expiry = 14
+split_idx = len(df) - time_to_expiry
+
+train = df[:split_idx+1]
+test = df[split_idx:]
 
 # Build Model
-model = ARIMA(train, order=(1, 0, 0))  
+model = ARIMA(train, order=(1, 0, 0))  # ARIMA(p=1,d=0,q=0)
 fitted = model.fit(disp=-1)  
 
 # Forecast
@@ -371,7 +381,6 @@ if navigation == 'Interactive Demo!':
     axes1.plot(fc_series, label='Forecast',color='C1')
     axes1.fill_between(lower_series.index, lower_series, upper_series, color='k', alpha=.15)
     axes1.legend(loc='upper left', fontsize=8)
-    # axes1.xaxis.set_major_locator(plt.MaxNLocator(6))
     st.pyplot(figure1)
 
 
@@ -390,14 +399,14 @@ if navigation == 'Interactive Demo!':
     lower_series = pd.Series(conf[:, 0], index=forecast_idx)
     upper_series = pd.Series(conf[:, 1], index=forecast_idx)
 
+    todays_date_text=todays_date.strftime('%B %d, %Y')
     # Plot
-    st.write(f'### Future VIX Forecast on data since {start_date_text}')
+    st.write(f'### VIX Forecast from {todays_date_text}')
     figure2, axes2 = plt.subplots(nrows=1, ncols=1, figsize=const_fig_size)
     axes2.plot(df[-start_plot_idx:], label='Past VIX',color='C0')
     axes2.plot(fc_series, label='Forecast',color='C1')
     axes2.fill_between(lower_series.index, lower_series, upper_series, color='k', alpha=.15)
     axes2.legend(loc='upper left', fontsize=8)
-    # axes2.xaxis.set_major_locator(plt.MaxNLocator(6))
     st.pyplot(figure2)
 
 
