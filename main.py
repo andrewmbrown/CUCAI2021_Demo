@@ -22,7 +22,12 @@ if navigation == 'Introduction':
         The stock market has been a money-making tool for millions of people around the world, and its increased volatility 
         during the pandemic presents several opportunities for traders and investors to generate considerable income.
 
-        ## Our Goal
+        ## The Power of Options!
+        - options are contracts
+        - expire at certain times
+        - By utilizing options trading strategies,.... Volatility matters! not direction.
+
+        ## Our Goal - Tanner
         Our goal was to implement a model that can track these trends and pick up on patterns within the stock market. Our 
         model is designed to analyse the recent volatility of VIX to forecast the future volatility and determine which options 
         trading strategy (from a predetermined subset) will yield the greatest return.
@@ -32,7 +37,7 @@ if navigation == 'Introduction':
         returns and incomes, traders must take advantage of both upward and downward trends in the market. Option contracts can be 
         utilized to benefit from both the adverse and favorable movements.
 
-        ## Our Solution
+        ## Our Solution - Andrew
         Our team researched and analyzed the Chicago Board Options Exchange (CBOE) Volatility Index (VIX). The price of the VIX is 
         obtained from the implied volatility of various options contracts belonging to securities in the S&P 500. 
 
@@ -85,7 +90,7 @@ if navigation == 'Options Description':
         chosen strike price. Thus, a profit can be made when the stock price goes below the strike, as it essentially
         allows the contract holder to sell a stock for more than its worth.
         
-        ## Buying v.s Selling Options
+        ## Buying vs Selling Options
         The notion of making profit described above in both puts and calls is in the context of buying an options contract; however, in order
         for there to be a buyer, there must also be a seller. The seller of the contract collects the premiums of the contract and is \'assigned\' the
         the obligation to sell/buy the shares should the buyer choose to execute. In this context, the seller makes the most profit as the 
@@ -261,19 +266,117 @@ if navigation == 'Our Solution':
         The unaltered data had a p-value of 0.000789, indicating that no differencing was necessary in order to achieve stationarity. Thus, a value of 1 was assgined to **d** going forward    
     """)
 
-    st.write("- *show PACF plots -> discuss how this gives us p*")
-    st.write("- *show ACF plots -> discuss how this gives us q*")
-    st.write("- *Discuss how to handle over/under differencing by adjust p or q -> discuss how this gives us p?*")
+    st.write("- *andrew: show PACF plots -> discuss how this gives us p*")
+    st.write("- *andrew: show ACF plots -> discuss how this gives us q*")
+    st.write("- *andrew: Discuss how to handle over/under differencing by adjust p or q -> discuss how this gives us p?*")
 
 
+    st.write("")
     st.write("**ARIMA Model Prediction on VIX**")
-    st.write("- *put arima code here and show prediction plot*")
-    st.write("- *show past value prediction plots*")
-    st.write("- *show future value forecast plots*")
-    st.write("- *show accuracy and other metrics results?*")
-    st.write("- *show options strategy recommendation*")
+
+    ## Predictions and plots
+    max_time_to_expiry = 21
+    time_to_expiry = 14
+    lookback_period = 500
+    
+    p_val = 1
+    d_val = 0
+    q_val = 0
+    
+    todays_date = datetime.date.today()
+    start_date = todays_date - datetime.timedelta(days=lookback_period)
+    start_date_text = start_date.strftime('%B %d, %Y')
+
+    tik = '^VIX'
+    vixData = yf.Ticker(tik)
+    vixDF = vixData.history(period='1d', start=start_date, end=todays_date).drop(['Volume','Dividends','Stock Splits'], axis = 1)
+
+    vixDF.rename(columns = {'Close':'Volatility'}, inplace = True) 
+    df = pd.DataFrame(vixDF['Volatility']).dropna()
+    
+    start_plot_idx = 365
+
+    const_fig_size=(9,4)
+
+    ## ARIMA for Predicting past data
+    # Create Training and Test
+    dataset_size = len(df)
+    split_idx = len(df) - time_to_expiry
+
+    train = df[:split_idx+1]
+    test = df[split_idx:]
+
+    # Build Model
+    model = ARIMA(train, order=(p_val, d_val, q_val))  
+    fitted = model.fit(disp=-1) 
+
+    # Forecast
+    fc, se, conf = fitted.forecast(time_to_expiry, alpha=0.25)  # 75% conf
+
+    # Make as pandas series
+    fc_series = pd.Series(fc, index=test.index)
+    lower_series = pd.Series(conf[:, 0], index=test.index)
+    upper_series = pd.Series(conf[:, 1], index=test.index)
+
+    todays_date_text = todays_date.strftime('%B %d, %Y')
+    end_date = todays_date + datetime.timedelta(days=time_to_expiry)
+    end_date_text = end_date.strftime('%B %d, %Y')
+    past_start_date = todays_date - datetime.timedelta(days=time_to_expiry)
+    past_start_date_text = past_start_date.strftime('%B %d, %Y')
+
+    # Plot
+    st.write(f'### Past VIX Forecast vs Actuals from {past_start_date_text} to {todays_date_text}')
+    figure1, axes1 = plt.subplots(nrows=1, ncols=1, figsize=const_fig_size)
+    axes1.plot(train[-start_plot_idx:], label='Training',color='C0')
+    axes1.plot(test, label='Actual',color='g')
+    axes1.plot(fc_series, label='Forecast',color='C1')
+    axes1.fill_between(lower_series.index, lower_series, upper_series, color='k', alpha=.15)
+    axes1.legend(loc='upper left', fontsize=8)
+    st.pyplot(figure1)
 
 
+    ## ARIMA for Forecasting Future data
+    # Build Model
+    model = ARIMA(df, order=(p_val, d_val, q_val))  
+    fitted = model.fit(disp=-1)  
+
+    # Forecast
+    fc2, se, conf = fitted.forecast(time_to_expiry, alpha=0.25)  # 75% conf
+
+    forecast_idx = pd.date_range(df.index[-1], periods=time_to_expiry)
+
+    # Make as pandas series
+    fc_series = pd.Series(fc2, index=forecast_idx)
+    lower_series = pd.Series(conf[:, 0], index=forecast_idx)
+    upper_series = pd.Series(conf[:, 1], index=forecast_idx)
+
+    # Plot
+    st.write(f'### Future VIX Forecast from {todays_date_text} to {end_date_text}')
+    figure2, axes2 = plt.subplots(nrows=1, ncols=1, figsize=const_fig_size)
+    axes2.plot(df[-start_plot_idx:], label='Past VIX',color='C0')
+    axes2.plot(fc_series, label='Forecast',color='C1')
+    axes2.fill_between(lower_series.index, lower_series, upper_series, color='k', alpha=.15)
+    axes2.legend(loc='upper left', fontsize=8)
+    st.pyplot(figure2)
+
+
+    # Decision/Recommendation Algorithm
+    st.write("")
+    st.write(f"### Trading Strategy Recommendation for options expiring in {time_to_expiry} days:")
+    volatility_difference = fc2[-1] - fc2[0]
+    volatility_range = df[-50:].mean()[0]
+    time_to_expiry_volatility_factor = time_to_expiry/(max_time_to_expiry+10) + 1
+    volatility_score = np.abs(2 * volatility_difference * time_to_expiry_volatility_factor / volatility_range)
+    
+    if volatility_score > 0.35:
+        st.write("## :point_right: *Use a **Long At-The-Money Put Vertical** (High Volatility Strategy)!*")
+    elif volatility_score > 0.12:
+        st.write("## :point_right: *Use a **Long At-The-Money Call Vertical** (Fairly Low Volatility Strategy)!*")
+    else:
+        st.write("## :point_right: *Use a **Married Put** (Low Volatility Strategy)!*")
+
+    
+    st.write("___")
     st.write("**Snippet of ARIMA Code**")
     code_snippet = '''# Download VIX Dataset
 tik = '^VIX'
@@ -291,8 +394,8 @@ split_idx = len(df) - time_to_expiry
 train = df[:split_idx+1]
 test = df[split_idx:]
 
-# Build Model
-model = ARIMA(train, order=(1, 0, 0))  # ARIMA(p=1,d=0,q=0)
+# Build ARIMA(p=1,d=0,q=0) Model
+model = ARIMA(train, order=(1, 0, 0))
 fitted = model.fit(disp=-1)  
 
 # Forecast
@@ -341,9 +444,6 @@ if navigation == 'Interactive Demo!':
     vixData = yf.Ticker(tik)
     vixDF = vixData.history(period='1d', start=start_date, end=todays_date).drop(['Volume','Dividends','Stock Splits'], axis = 1)
 
-    # st.write(f"### VIX Prediction on data since {start_date_text}")
-    # st.line_chart(vixDF.Close)
-
     vixDF.rename(columns = {'Close':'Volatility'}, inplace = True) 
     df = pd.DataFrame(vixDF['Volatility']).dropna()
     
@@ -374,8 +474,16 @@ if navigation == 'Interactive Demo!':
     lower_series = pd.Series(conf[:, 0], index=test.index)
     upper_series = pd.Series(conf[:, 1], index=test.index)
 
+    todays_date_text = todays_date.strftime('%B %d, %Y')
+
+    end_date = todays_date + datetime.timedelta(days=time_to_expiry)
+    end_date_text = end_date.strftime('%B %d, %Y')
+
+    past_start_date = todays_date - datetime.timedelta(days=time_to_expiry)
+    past_start_date_text = past_start_date.strftime('%B %d, %Y')
+
     # Plot
-    st.write(f'### Forecast vs Actuals on VIX data since {start_date_text}')
+    st.write(f'### Past VIX Forecast vs Actuals from {past_start_date_text} to {todays_date_text}')
     figure1, axes1 = plt.subplots(nrows=1, ncols=1, figsize=const_fig_size)
     axes1.plot(train[-start_plot_idx:], label='Training',color='C0')
     axes1.plot(test, label='Actual',color='g')
@@ -400,9 +508,8 @@ if navigation == 'Interactive Demo!':
     lower_series = pd.Series(conf[:, 0], index=forecast_idx)
     upper_series = pd.Series(conf[:, 1], index=forecast_idx)
 
-    todays_date_text=todays_date.strftime('%B %d, %Y')
     # Plot
-    st.write(f'### VIX Forecast from {todays_date_text}')
+    st.write(f'### Future VIX Forecast from {todays_date_text} to {end_date_text}')
     figure2, axes2 = plt.subplots(nrows=1, ncols=1, figsize=const_fig_size)
     axes2.plot(df[-start_plot_idx:], label='Past VIX',color='C0')
     axes2.plot(fc_series, label='Forecast',color='C1')
@@ -419,11 +526,6 @@ if navigation == 'Interactive Demo!':
     time_to_expiry_volatility_factor = time_to_expiry/(max_time_to_expiry+10) + 1
     volatility_score = np.abs(2 * volatility_difference * time_to_expiry_volatility_factor / volatility_range)
     
-    # st.write(volatility_difference)
-    # st.write(volatility_range)
-    # st.write(time_to_expiry_volatility_factor)
-    # st.write(volatility_score)
-
     if volatility_score > 0.35:
         st.write("## :point_right: *Use a **Long At-The-Money Put Vertical** (High Volatility Strategy)!*")
     elif volatility_score > 0.12:
