@@ -15,6 +15,7 @@ sideBarOptions = ['Introduction','Options Description', 'Strategies', 'ARIMA Des
 navigation = st.sidebar.selectbox('Go To', sideBarOptions, index = 0)
 
 if navigation == 'Introduction':
+    st.markdown("""____""")
     st.write("""
         ## Introduction
 
@@ -23,7 +24,7 @@ if navigation == 'Introduction':
 
         ## Our Goal
         Our goal was to implement a model that can track these trends and pick up on patterns within the stock market. Our 
-        model is designed to analyse the recent volatility of SPY to forecast the future volatility and determine which options 
+        model is designed to analyse the recent volatility of VIX to forecast the future volatility and determine which options 
         trading strategy (from a predetermined subset) will yield the greatest return.
 
         The SPY, an Exchange Traded Fund (ETF) compromised of securities included in the S&P 500, is up 76% from its early pandemic 
