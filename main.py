@@ -17,18 +17,37 @@ navigation = st.sidebar.selectbox('Go To', sideBarOptions, index = 0)
 
 if navigation == 'Introduction':
     st.markdown("""____""")
+    alex, smeet, andrew, tanner = st.beta_columns(4)
+    alex.image('src/alexandre_leblanc.jpeg')
+    smeet.image('src/smeet_chheda.JPG')
+    andrew.image('src/andrew_brown.jpg')
+    tanner.image('src/tanner_dunn.png')
     st.write("""
         ## Introduction
 
-        The stock market has been a money-making tool for millions of people around the world, and its increased volatility 
-        during the pandemic presents several opportunities for traders and investors to generate considerable income.
+        Stock markets can be incredible money-making tools, and have been for millions of people around the world.
+        However, stock markets can be very **volatile** and **unpredictable** - especially with events such as the recent 
+        global pandemic taking place. Thus, a few months, our group set out to utilize **time-series forecasting** 
+        techniques to get a better sense of future market trends and empower investors to make more informed decisions.
+
+        As opposed to predicting whether a particular stock or index price is going to move up or down, we wanted to 
+        take a different approach to forecasting market trends. We decided to predict volatility. In other words, we wanted 
+        to predict *likelihood* and *magnitude* of change, with little regard to direction. Additionally, we wanted a 
+        strategy which would allow us to better hedge our bets. These desires led us to explore the power of stock options.
 
         ## The Power of Options!
-        - options are contracts
-        - expire at certain times
-        - By utilizing options trading strategies,.... Volatility matters! not direction.
+        
+        Trends in volatility indexes allows an investor to make more calculated decisions,
+        but the use of **Options** offers a whole new range of investment strategies. Options are contracts that are offered
+        for various securities. The terms of the contract can be chosen from a range of choices set by the companies themselves.
+        This level of customization allows traders to not only make money on equities moving upward, but also when they are suffering losses.
+        With this in their toolbelt, traders can use volatility trends to make investment decisions, but also hedge their downside risk by incorporating 
+        Options contracts in their strategy. Essentially, an investor can utilize Options to make a \'bet\' as to the direction of the underlying stock price,
+        such that they make profit when the stock moves favourably in regard to their contract terms, but also to mitigate the amount of money they could lose
+        should the stock move the other way.
 
-        ## Our Goal - Tanner
+
+        ## Our Goal
         Our goal was to implement a model that can track these trends and pick up on patterns within the stock market. Our 
         model is designed to analyse the recent volatility of VIX to forecast the future volatility and determine which options 
         trading strategy (from a predetermined subset) will yield the greatest return.
@@ -38,7 +57,7 @@ if navigation == 'Introduction':
         returns and incomes, traders must take advantage of both upward and downward trends in the market. Option contracts can be 
         utilized to benefit from both the adverse and favorable movements.
 
-        ## Our Solution - Andrew
+        ## Our Solution
         Our team researched and analyzed the Chicago Board Options Exchange (CBOE) Volatility Index (VIX). The price of the VIX is 
         obtained from the implied volatility of various options contracts belonging to securities in the S&P 500. 
 
@@ -132,7 +151,7 @@ if navigation == 'Strategies':
         purchasing **puts** with a strike price near the price at which the shares were purchased.
     """)
 
-    st.image('./src/marriedPut.png')
+    st.image('./src/marriedPut.PNG')
 
     st.write("""
         The picture above illustrates the benefit of using this stratgy as opposed to purchasing the shares or puts alone.
@@ -430,6 +449,7 @@ if navigation == 'Interactive Demo!':
     st.markdown("""____""")
     st.write("""## :video_game: Interactive Demo!""")
     st.write("")
+    st.write("Feel free to design and customize your own Volatility Prediction ARIMA Model!")
 
     max_time_to_expiry = 28
 
