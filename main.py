@@ -19,8 +19,15 @@ if navigation == 'Introduction':
     st.write("""
         ## Introduction
 
-        The stock market has been a money-making tool for millions of people around the world, and its increased volatility 
-        during the pandemic presents several opportunities for traders and investors to generate considerable income.
+        Stock markets can be incredible money-making tools, and have been for millions of people around the world.
+        However, stock markets can be very **volatile** and **unpredictable** - especially with events such as the recent 
+        global pandemic taking place. Thus, a few months, our group set out to utilize **time-series forecasting** 
+        techniques to get a better sense of future market trends and empower investors to make more informed decisions.
+
+        As opposed to predicting whether a particular stock or index price is going to move up or down, we wanted to 
+        take a different approach to forecasting market trends. We decided to predict volatility. In other words, we wanted 
+        to predict *likelihood* and *magnitude* of change, with little regard to direction. Additionally, we wanted a 
+        strategy which would allow us to better hedge our bets. These decisions were motivated by the power of options.
 
         ## The Power of Options!
         - options are contracts
