@@ -16,6 +16,11 @@ navigation = st.sidebar.selectbox('Go To', sideBarOptions, index = 0)
 
 if navigation == 'Introduction':
     st.markdown("""____""")
+    alex, smeet, andrew, tanner = st.beta_columns(4)
+    alex.image('src/alexandre_leblanc.jpeg')
+    smeet.image('src/smeet_chheda.JPG')
+    andrew.image('src/andrew_brown.jpg')
+    tanner.image('src/tanner_dunn.png')
     st.write("""
         ## Introduction
 
@@ -39,7 +44,7 @@ if navigation == 'Introduction':
         With this in their toolbelt, traders can use volatility trends to make investment decisions, but also hedge their downside risk by in
         corporating Options contracts in their strategy.
 
-        ## Our Goal - Tanner
+        ## Our Goal
         Our goal was to implement a model that can track these trends and pick up on patterns within the stock market. Our 
         model is designed to analyse the recent volatility of VIX to forecast the future volatility and determine which options 
         trading strategy (from a predetermined subset) will yield the greatest return.
@@ -49,7 +54,7 @@ if navigation == 'Introduction':
         returns and incomes, traders must take advantage of both upward and downward trends in the market. Option contracts can be 
         utilized to benefit from both the adverse and favorable movements.
 
-        ## Our Solution - Andrew
+        ## Our Solution
         Our team researched and analyzed the Chicago Board Options Exchange (CBOE) Volatility Index (VIX). The price of the VIX is 
         obtained from the implied volatility of various options contracts belonging to securities in the S&P 500. 
 
@@ -143,7 +148,7 @@ if navigation == 'Strategies':
         purchasing **puts** with a strike price near the price at which the shares were purchased.
     """)
 
-    st.image('./src/marriedPut.png')
+    st.image('./src/marriedPut.PNG')
 
     st.write("""
         The picture above illustrates the benefit of using this stratgy as opposed to purchasing the shares or puts alone.
