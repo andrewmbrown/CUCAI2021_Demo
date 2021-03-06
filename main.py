@@ -41,7 +41,10 @@ if navigation == 'Introduction':
         for various securities. The terms of the contract can be chosen from a range of choices set by the companies themselves.
         This level of customization allows traders to not only make money on equities moving upward, but also when they are suffering losses.
         With this in their toolbelt, traders can use volatility trends to make investment decisions, but also hedge their downside risk by incorporating 
-        Options contracts in their strategy.
+        Options contracts in their strategy. Essentially, an investor can utilize Options to make a \'bet\' as to the direction of the underlying stock price,
+        such that they make profit when the stock moves favourably in regard to their contract terms, but also to mitigate the amount of money they could lose
+        should the stock move the other way.
+
 
         ## Our Goal
         Our goal was to implement a model that can track these trends and pick up on patterns within the stock market. Our 
