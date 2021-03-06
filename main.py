@@ -441,6 +441,7 @@ if navigation == 'Interactive Demo!':
     st.markdown("""____""")
     st.write("""## :video_game: Interactive Demo!""")
     st.write("")
+    st.write("Feel free to design and customize your own Volatility Prediction ARIMA Model!")
 
     max_time_to_expiry = 28
 
