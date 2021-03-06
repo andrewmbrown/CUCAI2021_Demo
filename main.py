@@ -30,9 +30,14 @@ if navigation == 'Introduction':
         strategy which would allow us to better hedge our bets. These decisions were motivated by the power of options.
 
         ## The Power of Options!
-        - options are contracts
-        - expire at certain times
-        - By utilizing options trading strategies,.... Volatility matters! not direction.
+        
+        Although volatility is an important factor to consider when making any investment decision, it falls short as a metric in
+        the sense that volatility doesn't offer direction. Trends in volatility indexes allows an investor to make more calculated decisions,
+        but the use of **Options** offers a whole new range of investment strategies. Options are contracts that are offered
+        for various different securities. The terms of the contract can be chosen from a range of choices set by the companies themselves.
+        This level of customization allows traders to not only make money on equities moving upward, but also when they are suffering losses.
+        With this in their toolbelt, traders can use volatility trends to make investment decisions, but also hedge their downside risk by in
+        corporating Options contracts in their strategy.
 
         ## Our Goal - Tanner
         Our goal was to implement a model that can track these trends and pick up on patterns within the stock market. Our 
@@ -273,10 +278,15 @@ if navigation == 'Our Solution':
         The unaltered data had a p-value of 0.000789, indicating that no differencing was necessary in order to achieve stationarity. Thus, a value of 1 was assgined to **d** going forward    
     """)
 
-    st.write("- *andrew: show PACF plots -> discuss how this gives us p*")
-    st.write("- *andrew: show ACF plots -> discuss how this gives us q*")
-    st.write("- *andrew: Discuss how to handle over/under differencing by adjust p or q -> discuss how this gives us p?*")
+    st.subheader('Finding Order of AR Term (p)')
+    st.image('./src/acf_plot.png')
+    st.write('Lag 1 seems to be within limit. Therefore we can reasonably set p=0')
+    st.subheader('Finding Order of MA Term (q)')
+    st.image('./src/pacf_plot.png')
+    st.write('Lag 1 seems to be within limit. Therefore we can reasonably set q=0')
 
+    st.write('The right order of differencing is the minimum differencing required to get a near-stationary series which roams around a defined mean and the ACF plot reaches to zero fairly quick.')
+    st.write('We determined that p=0 and q=0 are a good tradeoff between near-stationarity and predictability in the data')
 
     st.write("")
     st.write("**ARIMA Model Prediction on VIX**")
