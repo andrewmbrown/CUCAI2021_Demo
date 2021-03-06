@@ -7,6 +7,7 @@ import matplotlib.pylab as plt
 from statsmodels.tsa.arima_model import ARIMA
 
 st.title("Stock Options' Volatility Prediction :chart_with_upwards_trend:")
+st.header("This is strictly **educational content only**")
 st.header("QMIND - Group 21 - March 6th, 2021")
 st.subheader("Alex Le Blanc :coffee:, Smeet Chheda :100:, Andrew Brown :raised_hands:, Tanner Dunn :sunglasses:")
 
