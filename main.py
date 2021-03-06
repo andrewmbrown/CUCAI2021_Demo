@@ -148,7 +148,7 @@ if navigation == 'Strategies':
         purchasing **puts** with a strike price near the price at which the shares were purchased.
     """)
 
-    st.image('./src/marriedPut.png')
+    st.image('./src/marriedPut.PNG')
 
     st.write("""
         The picture above illustrates the benefit of using this stratgy as opposed to purchasing the shares or puts alone.
