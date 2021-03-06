@@ -23,9 +23,13 @@ if navigation == 'Introduction':
         during the pandemic presents several opportunities for traders and investors to generate considerable income.
 
         ## The Power of Options!
-        - options are contracts
-        - expire at certain times
-        - By utilizing options trading strategies,.... Volatility matters! not direction.
+        Although volatility is an important factor to consider when making any investment decision, it falls short as a metric in
+        the sense that volatility doesn't offer direction. Trends in volatility indexes allows an investor to make more calculated decisions,
+        but the use of **Options** offers a whole new range of investment strategies. Options are contracts that are offered
+        for various different securities. The terms of the contract can be chosen from a range of choices set by the companies themselves.
+        This level of customization allows traders to not only make money on equities moving upward, but also when they are suffering losses.
+        With this in their toolbelt, traders can use volatility trends to make investment decisions, but also hedge their downside risk by in
+        corporating Options contracts in their strategy.
 
         ## Our Goal - Tanner
         Our goal was to implement a model that can track these trends and pick up on patterns within the stock market. Our 
