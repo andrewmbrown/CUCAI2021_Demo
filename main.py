@@ -7,6 +7,7 @@ import matplotlib.pylab as plt
 from statsmodels.tsa.arima_model import ARIMA
 
 st.title("Stock Options' Volatility Prediction :chart_with_upwards_trend:")
+st.header("Disclaimer: This is strictly **educational content only**")
 st.header("QMIND - Group 21 - March 6th, 2021")
 st.subheader("Alex Le Blanc :coffee:, Smeet Chheda :100:, Andrew Brown :raised_hands:, Tanner Dunn :sunglasses:")
 
@@ -36,13 +37,15 @@ if navigation == 'Introduction':
 
         ## The Power of Options!
         
-        Although volatility is an important factor to consider when making any investment decision, it falls short as a metric in
-        the sense that volatility doesn't offer direction. Trends in volatility indexes allows an investor to make more calculated decisions,
+        Trends in volatility indexes allows an investor to make more calculated decisions,
         but the use of **Options** offers a whole new range of investment strategies. Options are contracts that are offered
-        for various different securities. The terms of the contract can be chosen from a range of choices set by the companies themselves.
+        for various securities. The terms of the contract can be chosen from a range of choices set by the companies themselves.
         This level of customization allows traders to not only make money on equities moving upward, but also when they are suffering losses.
-        With this in their toolbelt, traders can use volatility trends to make investment decisions, but also hedge their downside risk by in
-        corporating Options contracts in their strategy.
+        With this in their toolbelt, traders can use volatility trends to make investment decisions, but also hedge their downside risk by incorporating 
+        Options contracts in their strategy. Essentially, an investor can utilize Options to make a \'bet\' as to the direction of the underlying stock price,
+        such that they make profit when the stock moves favourably in regard to their contract terms, but also to mitigate the amount of money they could lose
+        should the stock move the other way.
+
 
         ## Our Goal
         Our goal was to implement a model that can track these trends and pick up on patterns within the stock market. Our 
