@@ -388,14 +388,15 @@ if navigation == 'Our Solution':
     volatility_difference = fc2[-1] - fc2[0]
     volatility_range = df[-50:].mean()[0]
     time_to_expiry_volatility_factor = time_to_expiry/(max_time_to_expiry+10) + 1
-    volatility_score = np.abs(2 * volatility_difference * time_to_expiry_volatility_factor / volatility_range)
+    volatility_score = 2 * volatility_difference * time_to_expiry_volatility_factor / volatility_range
     
-    if volatility_score > 0.35:
-        st.write("## :point_right: *Use a **Long At-The-Money Put Vertical** (High Volatility Strategy)!*")
-    elif volatility_score > 0.12:
-        st.write("## :point_right: *Use a **Long At-The-Money Call Vertical** (Fairly Low Volatility Strategy)!*")
+    volatility_threshold = 0.15
+    if volatility_score > volatility_threshold:
+        st.write("## :point_right: *Use a **Long At-The-Money Put Vertical**! *\n*(High Volatility Strategy)*")
+    elif volatility_score < -volatility_threshold:
+        st.write("## :point_right: *Use a **Married Put**! *\n*(Low Volatility Strategy)*")
     else:
-        st.write("## :point_right: *Use a **Married Put** (Low Volatility Strategy)!*")
+        st.write("## :point_right: *Use a **Long At-The-Money Call Vertical**! *\n*(Fairly Low Volatility Strategy)*")
 
     
     st.write("___")
@@ -547,11 +548,12 @@ if navigation == 'Interactive Demo!':
     volatility_difference = fc2[-1] - fc2[0]
     volatility_range = df[-50:].mean()[0]
     time_to_expiry_volatility_factor = time_to_expiry/(max_time_to_expiry+10) + 1
-    volatility_score = np.abs(2 * volatility_difference * time_to_expiry_volatility_factor / volatility_range)
+    volatility_score = 2 * volatility_difference * time_to_expiry_volatility_factor / volatility_range
     
-    if volatility_score > 0.35:
-        st.write("## :point_right: *Use a **Long At-The-Money Put Vertical** (High Volatility Strategy)!*")
-    elif volatility_score > 0.12:
-        st.write("## :point_right: *Use a **Long At-The-Money Call Vertical** (Fairly Low Volatility Strategy)!*")
+    volatility_threshold = 0.15
+    if volatility_score > volatility_threshold:
+        st.write("## :point_right: *Use a **Long At-The-Money Put Vertical**! *\n*(High Volatility Strategy)*")
+    elif volatility_score < -volatility_threshold:
+        st.write("## :point_right: *Use a **Married Put**! *\n*(Low Volatility Strategy)*")
     else:
-        st.write("## :point_right: *Use a **Married Put** (Low Volatility Strategy)!*")
+        st.write("## :point_right: *Use a **Long At-The-Money Call Vertical**! *\n*(Fairly Low Volatility Strategy)*")
