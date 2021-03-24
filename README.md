@@ -1,4 +1,6 @@
 # CUCAI 2021 Interactive Demo
+# To view demo, click the link!
+# https://share.streamlit.io/andrewmbrown/cucai2021_demo/main/main.py
 
 ## Stock Options Volatility Prediction
 
