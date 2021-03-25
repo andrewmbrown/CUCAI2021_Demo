@@ -4,7 +4,7 @@
 
 ## Stock Options Volatility Prediction
 
-### Andrew Brown, Alex Le Blanc, Smeet Chheda, Tanner Dunn
+### Alex Le Blanc, Andrew Brown, Smeet Chheda, Tanner Dunn
 
 Stock markets can be incredible money-making tools, and have been for millions of people around the world. However, stock markets can be very volatile and unpredictable - especially with events such as the recent global pandemic taking place. Thus, a few months, our group set out to utilize time-series forecasting techniques to get a better sense of future market trends and empower investors to make more informed decisions.
 
